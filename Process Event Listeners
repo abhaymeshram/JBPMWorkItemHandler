@@ -1,0 +1,41 @@
+Dependencies:
+<dependencies>
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-workitems-core</artifactId>
+			<version>7.20.0.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jbpm/jbpm-services-api -->
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-services-api</artifactId>
+			<version>7.20.0.Final</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+  
+  
+  Event Code:
+  public void beforeProcessCompleted(ProcessCompletedEvent event) {
+		WorkflowProcessInstanceImpl pi = (WorkflowProcessInstanceImpl) event.getProcessInstance();
+		Map<String, Object> processVariables = new HashMap<String, Object>(); 
+		processVariables.putAll(pi.getVariables());
+		System.out.println(pi.getVariables());
+		
+		String name = (String) processVariables.get("name");
+		
+		
+		  if("Abhay".equals(name) && pi.getId() == 426)
+		  { ProcessService service =
+		  (ProcessService)
+		  ServiceRegistry.get().service(ServiceRegistry.PROCESS_SERVICE);
+		  service.startProcess( ((WorkflowProcessInstanceImpl)
+		  event.getProcessInstance()).getDeploymentId(),
+		  "com.myspace.wfstartcloseprocess.WFStartProcess", processVariables); }
+		 
+	
+		
+		//event.getKieRuntime().startProcess("processID", processVariables);
+	}
